@@ -4,7 +4,11 @@ on:
   push:
     branches: [main]
     paths: ['common/**', 'ffmpeg/**', 'whisper/**', 'uvr/**', 'f5tts/**', 'rvc/**', '.github/workflows/build.yml']
-  workflow_dispatch: {}
+  workflow_dispatch:
+    inputs:
+      tools:
+        description: 'JSON-Liste, z. B. ["rvc"]'
+        default: '["ffmpeg","whisper","uvr","f5tts","rvc"]'
 permissions:
   contents: read
   packages: write
@@ -14,11 +18,11 @@ concurrency:
 jobs:
   image:
     runs-on: ubuntu-latest
-    timeout-minutes: 120
+    timeout-minutes: 90
     strategy:
       fail-fast: false
       matrix:
-        tool: [ffmpeg, whisper, uvr, f5tts, rvc]
+        tool: ${{ fromJSON(github.event.inputs.tools || '["ffmpeg","whisper","uvr","f5tts","rvc"]') }}
     steps:
       - name: Platz schaffen
         run: |
