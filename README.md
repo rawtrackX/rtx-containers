@@ -10,6 +10,7 @@ Nur Open-Source-Programme, keine Inhalte, keine Zugangsdaten. Eingaben per https
 | ghcr.io/rawtrackx/rtx-uvr | UVR-Modelle (python-audio-separator) | /ready, /run |
 | ghcr.io/rawtrackx/rtx-f5tts | F5-TTS | /ready, /run |
 | ghcr.io/rawtrackx/rtx-rvc | RVC (rvc-python) | /ready, /run |
+| ghcr.io/rawtrackx/rtx-schnitt | Automatischer Videoschnitt (FFmpeg, Ersatz für CapCut) | /ready, /run (Schnittplan) |
 
 Bild, Video und Musik laufen über das offizielle Salad-Image `ghcr.io/saladtechnologies/comfyui-api` (SDXL, Wan 2.1, ACE-Step).
 Status: VORBEREITET – Bau über GitHub Actions (`.github/workflows/build.yml`).

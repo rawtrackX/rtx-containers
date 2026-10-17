@@ -3,12 +3,12 @@ name: build
 on:
   push:
     branches: [main]
-    paths: ['common/**', 'ffmpeg/**', 'whisper/**', 'uvr/**', 'f5tts/**', 'rvc/**', '.github/workflows/build.yml']
+    paths: ['common/**', 'ffmpeg/**', 'whisper/**', 'uvr/**', 'f5tts/**', 'rvc/**', 'schnitt/**', '.github/workflows/build.yml']
   workflow_dispatch:
     inputs:
       tools:
-        description: 'JSON-Liste, z. B. ["rvc"]'
-        default: '["ffmpeg","whisper","uvr","f5tts","rvc"]'
+        description: 'JSON-Liste, z. B. ["rvc","schnitt"]'
+        default: '["ffmpeg","whisper","uvr","f5tts","rvc","schnitt"]'
 permissions:
   contents: read
   packages: write
@@ -22,7 +22,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        tool: ${{ fromJSON(github.event.inputs.tools || '["ffmpeg","whisper","uvr","f5tts","rvc"]') }}
+        tool: ${{ fromJSON(github.event.inputs.tools || '["ffmpeg","whisper","uvr","f5tts","rvc","schnitt"]') }}
     steps:
       - name: Platz schaffen
         run: |
