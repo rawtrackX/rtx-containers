@@ -50,3 +50,6 @@ def run(r: RunReq):
         return {"ok": True, "language": info.language, "duration": info.duration, "text": " ".join(x["text"] for x in out), "segments": out, "input_sha256": rtxio.sha256_file(src)}
     finally:
         os.remove(src)
+
+
+rtxio.enable_jobs(app)  # v1.1 (17.10.2026): asynchrone Aufträge /jobs/<pfad>

@@ -42,3 +42,6 @@ def run(r: RunReq):
     finally:
         os.remove(src)
         shutil.rmtree(outdir, ignore_errors=True)
+
+
+rtxio.enable_jobs(app)  # v1.1 (17.10.2026): asynchrone Aufträge /jobs/<pfad>

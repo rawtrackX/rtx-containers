@@ -46,3 +46,6 @@ def run(r: RunReq):
         for f in (ref, out):
             if os.path.exists(f):
                 os.remove(f)
+
+
+rtxio.enable_jobs(app)  # v1.1 (17.10.2026): asynchrone Aufträge /jobs/<pfad>

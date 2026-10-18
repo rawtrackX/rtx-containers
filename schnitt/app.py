@@ -45,3 +45,6 @@ def run(p: Plan):
         raise HTTPException(500, str(e)[:1500])
     finally:
         shutil.rmtree(work, ignore_errors=True)
+
+
+rtxio.enable_jobs(app)  # v1.1 (17.10.2026): asynchrone Aufträge /jobs/<pfad>
