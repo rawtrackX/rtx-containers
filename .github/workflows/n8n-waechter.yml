@@ -1,0 +1,30 @@
+# n8n-Waechter ohne KI-Kosten (06.11.2026): prueft alle 10 Minuten /healthz von rtx-n8n-main.
+# Fehlt n8n dreimal hintereinander, wird (wenn das Secret SLIPLANE_DEPLOY_HOOK gesetzt ist) einmal neu gestartet.
+# Bleibt n8n danach down, schlaegt der Lauf fehl -> GitHub schickt eine E-Mail. Die Hook-Adresse wird nie ausgegeben.
+name: n8n-waechter
+on:
+  schedule:
+    - cron: '*/10 * * * *'
+  workflow_dispatch: {}
+permissions:
+  contents: read
+concurrency:
+  group: n8n-waechter
+  cancel-in-progress: false
+jobs:
+  pruefen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HOOK: ${{ secrets.SLIPLANE_DEPLOY_HOOK }}
+    steps:
+      - name: Pruefen und ggf. neu starten
+        run: |
+          URL=https://rtx-n8n-main.sliplane.app/healthz
+          ok() { for i in 1 2 3; do c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$URL"); [ "$c" = "200" ] && return 0; sleep 20; done; return 1; }
+          if ok; then echo "n8n ok"; exit 0; fi
+          echo "n8n antwortet nicht (3 Versuche)"
+          if [ -z "$HOOK" ]; then echo "Kein Neustart: Secret SLIPLANE_DEPLOY_HOOK fehlt"; exit 1; fi
+          curl -s -o /dev/null -X POST --max-time 30 "$HOOK" && echo "Neustart ausgeloest $(date -u +%H:%M) UTC"
+          for i in $(seq 1 20); do sleep 15; c=$(curl -s -o /dev/null -w '%{http_code}' --max-time 15 "$URL"); [ "$c" = "200" ] && { echo "n8n wieder erreichbar"; exit 0; }; done
+          echo "n8n nach Neustart weiter nicht erreichbar"; exit 1
